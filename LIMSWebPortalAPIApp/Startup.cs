@@ -37,7 +37,7 @@ namespace LIMSWebPortalAPIApp
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("WebConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddAutoMapper(typeof(Maps));
             services.AddSwaggerGen(c=> {
@@ -52,6 +52,11 @@ namespace LIMSWebPortalAPIApp
             services.AddSingleton(new ConnectionStringData
             {
                 SqlConnectionName = "Default"
+            });
+            services.AddAuthentication("Cookieauth").AddCookie("CookieAuth", config =>
+            {
+                config.Cookie.Name = "LIMS.Cookie";
+                config.LoginPath = "/Home/Authenticate";
             });
             services.AddSingleton<IDataAccess, SqlDb>();
             services.AddScoped<IAnalysisData, AnalysisData>();

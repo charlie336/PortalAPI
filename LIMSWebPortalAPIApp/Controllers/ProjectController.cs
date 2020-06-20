@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using DataLibrary.Data;
@@ -49,6 +50,11 @@ namespace LIMSWebPortalAPIApp.Controllers
                 _logger.LogError($"{e.Message} -{e.InnerException}");
                 return StatusCode(500, "Something wrong. PLease contact the administrator");
             }
+        }
+
+        public IActionResult Authenticate()
+        {
+            var userClaims = new List<Claim>() { new Claim(ClaimTypes.Name)}
         }
     }
 }
