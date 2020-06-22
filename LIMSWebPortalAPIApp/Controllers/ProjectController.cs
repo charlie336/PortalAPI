@@ -52,9 +52,9 @@ namespace LIMSWebPortalAPIApp.Controllers
             }
         }
 
-        public IActionResult Authenticate()
-        {
-            var userClaims = new List<Claim>() { new Claim(ClaimTypes.Name)}
-        }
+        //public IActionResult Authenticate()
+        //{
+        //    var userClaims = new List<Claim>() { new Claim(ClaimTypes.Name)}
+        //}
     }
 }
