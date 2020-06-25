@@ -33,7 +33,7 @@ namespace LIMSWebPortalAPIApp.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost]
+        [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] AppUserDTO userDTO)
         {
             var username = userDTO.Username;

@@ -75,11 +75,20 @@ namespace LIMSWebPortalAPIApp
             {
                 SqlConnectionName = "Default"
             });
-            services.AddAuthentication("Cookieauth").AddCookie("CookieAuth", config =>
+            //services.AddAuthentication("Cookieauth").AddCookie("CookieAuth", config =>
+            //{
+            //    config.Cookie.Name = "LIMS.Cookie";
+            //    config.LoginPath = "/Home/Authenticate";
+            //});
+
+            services.AddCors(options =>
             {
-                config.Cookie.Name = "LIMS.Cookie";
-                config.LoginPath = "/Home/Authenticate";
+                options.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                });
             });
+
             services.AddSingleton<IDataAccess, SqlDb>();
             services.AddScoped<IAnalysisData, AnalysisData>();
             services.AddScoped<IProjectData, ProjectData>();
@@ -100,7 +109,7 @@ namespace LIMSWebPortalAPIApp
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseCors("CorsPolicy");
             app.UseSwagger();
             app.UseSwaggerUI(c=> {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Web portal API");
