@@ -59,8 +59,7 @@ namespace LIMSWebPortalAPIApp.Controllers
             catch(Exception e)
             {
                 return InternalError($"location:{ e.Message} - {e.InnerException}");
-            }
-            
+            }            
         }
 
         [AllowAnonymous]
