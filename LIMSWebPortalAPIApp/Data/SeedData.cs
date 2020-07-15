@@ -97,5 +97,15 @@ namespace LIMSWebPortalAPIApp.Data
             //    await roleManager.CreateAsync(role);
             //}
         }
+
+        private async static Task AddRolestoUsers(UserManager<IdentityUser> userManager, RoleManager<IdentityUser> roleManager)
+        {
+            var user = await userManager.FindByNameAsync("CharlieLiu");
+            var adminRole = await roleManager.FindByNameAsync("CUSTOMER_ADMIN");
+            if (user!=null)
+            {
+
+            }
+        }
     }
 }
