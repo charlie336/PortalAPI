@@ -15,6 +15,7 @@ namespace LIMSWebPortalAPIApp.Data
         {
             await SeedRoles(roleManager);
             await SeedUsers(userManager);
+            await AddRolestoUsers(userManager, roleManager);
 
         }
         private async static Task SeedUsers(UserManager<IdentityUser> userManager)
@@ -98,13 +99,13 @@ namespace LIMSWebPortalAPIApp.Data
             //}
         }
 
-        private async static Task AddRolestoUsers(UserManager<IdentityUser> userManager, RoleManager<IdentityUser> roleManager)
+        private async static Task AddRolestoUsers(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             var user = await userManager.FindByNameAsync("CharlieLiu");
             var adminRole = await roleManager.FindByNameAsync("CUSTOMER_ADMIN");
-            if (user!=null)
+            if (user!=null && adminRole!=null)
             {
-
+                var result = await userManager.AddToRoleAsync(user, "CUSTOMER_ADMIN");
             }
         }
     }
