@@ -22,12 +22,13 @@ namespace LIMSWebPortalAPIApp.Controllers
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly RoleManager<IdentityUser> _roleManager;
+        //private readonly RoleManager<IdentityUser> _roleManager;
+        private RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _config;
         private readonly ILoggerService _logger;
         public UsersController(SignInManager<IdentityUser> signInManager, 
             UserManager<IdentityUser> userManager,
-            RoleManager<IdentityUser> roleManager,
+            RoleManager<IdentityRole> roleManager,
             IConfiguration config,
             ILoggerService logger)
         {
@@ -85,17 +86,17 @@ namespace LIMSWebPortalAPIApp.Controllers
 
         [HttpPost("Userroles")]
         [Authorize]
-        public async Task<IActionResult> GetUserRoles([FromBody]string userId)
+        public async Task<IActionResult> GetUserRoles([FromBody] string userId)
         {
             var location = GetControllerActionNames();
             var user = await _userManager.FindByIdAsync(userId);
             var userRoleIds = await _userManager.GetRolesAsync(user);
             List<IdentityUser> roles = new List<IdentityUser>();
             List<string> roleNames = new List<string>();
-            foreach(string roleId in userRoleIds)
+            foreach (string roleId in userRoleIds)
             {
                 var role = await _roleManager.FindByIdAsync(roleId);
-                if(role != null)
+                if (role != null)
                 {
                     var roleName = await _roleManager.GetRoleNameAsync(role);
                     roleNames.Add(roleName);
