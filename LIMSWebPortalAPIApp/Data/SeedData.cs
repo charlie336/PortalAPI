@@ -20,25 +20,25 @@ namespace LIMSWebPortalAPIApp.Data
         }
         private async static Task SeedUsers(UserManager<IdentityUser> userManager)
         {
-            if(await userManager.FindByEmailAsync("charlie@aemtek.com") == null)
+            //if(await userManager.FindByEmailAsync("charlie@aemtek.com") == null)
+            //{
+            //    var user = new IdentityUser
+            //    {
+            //        UserName = "CharlieLiu",
+            //        Email = "charlie@aemtek.com"
+            //    };
+            //    var result = await userManager.CreateAsync(user, "P@ssword1");
+            //    if (result.Succeeded)
+            //    {
+            //        await userManager.AddToRoleAsync(user, "SUPER_ADMIN");
+            //    }
+            //}
+            if (await userManager.FindByEmailAsync("scott@beforebrands.com") == null)
             {
                 var user = new IdentityUser
                 {
-                    UserName = "CharlieLiu",
-                    Email = "charlie@aemtek.com"
-                };
-                var result = await userManager.CreateAsync(user, "P@ssword1");
-                if (result.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(user, "SUPER_ADMIN");
-                }
-            }
-            if (await userManager.FindByEmailAsync("kimw@aemtek.com") == null)
-            {
-                var user = new IdentityUser
-                {
-                    UserName = "KimWright",
-                    Email = "kimw@aemtek.com"
+                    UserName = "scott@beforebrands.com",
+                    Email = "scott@beforebrands.com"
                 };
                 var result = await userManager.CreateAsync(user, "P@ssword1");
                 if (result.Succeeded)
@@ -46,19 +46,19 @@ namespace LIMSWebPortalAPIApp.Data
                     await userManager.AddToRoleAsync(user, "CUSTOMER_ADMIN");
                 }
             }
-            if (await userManager.FindByEmailAsync("cliu336@yahoo.com") == null)
-            {
-                var user = new IdentityUser
-                {
-                    UserName = "CharlieClient",
-                    Email = "cliu336@yahoo.com"
-                };
-                var result = await userManager.CreateAsync(user, "P@ssword1");
-                if (result.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(user, "CUSTOMER_COA");
-                }
-            }
+            //if (await userManager.FindByEmailAsync("cliu336@yahoo.com") == null)
+            //{
+            //    var user = new IdentityUser
+            //    {
+            //        UserName = "CharlieClient",
+            //        Email = "cliu336@yahoo.com"
+            //    };
+            //    var result = await userManager.CreateAsync(user, "P@ssword1");
+            //    if (result.Succeeded)
+            //    {
+            //        await userManager.AddToRoleAsync(user, "CUSTOMER_COA");
+            //    }
+            //}
         }
 
         private async static Task SeedRoles(RoleManager<IdentityRole> roleManager)

@@ -115,7 +115,7 @@ namespace LIMSWebPortalAPIApp
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Web portal API");
             });
             app.UseHttpsRedirection();
-            //SeedData.Seed(userManager, roleManager).Wait();
+            SeedData.Seed(userManager, roleManager).Wait();
             app.UseRouting();
 
             app.UseAuthentication();
