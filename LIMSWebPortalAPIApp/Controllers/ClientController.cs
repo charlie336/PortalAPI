@@ -29,8 +29,12 @@ namespace LIMSWebPortalAPIApp.Controllers
         }
 
         [Authorize(Roles = "CUSTOMER_ADMIN")]
-        [Authorize(Roles = "SUPER_ADMIN")]
-        //public async Task<IActionResult> GetContacts([FromBody] string userId)
+        //[Authorize(Roles = "SUPER_ADMIN")]
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //public async Task<IActionResult> GetContacts(string userId)
         //{
         //    //get clientId from userId
         //    //get contacts from clientId
