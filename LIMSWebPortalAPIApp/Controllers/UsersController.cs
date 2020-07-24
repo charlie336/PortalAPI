@@ -79,7 +79,7 @@ namespace LIMSWebPortalAPIApp.Controllers
             {
                 var user = await _userManager.FindByNameAsync(email);
                 var tokenstring = await GenerateJSONToken(user);
-                return Ok(new {token = tokenstring });
+                return Ok(new {token = tokenstring, id = user.Id});
             }
             return Unauthorized(userDTO);
         }
