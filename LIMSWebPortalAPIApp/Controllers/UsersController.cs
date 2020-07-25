@@ -13,6 +13,7 @@ using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using LIMSWebPortalAPIApp.Contracts;
+using DataLibrary.DTOModels;
 
 namespace LIMSWebPortalAPIApp.Controllers
 {
@@ -79,7 +80,27 @@ namespace LIMSWebPortalAPIApp.Controllers
             {
                 var user = await _userManager.FindByNameAsync(email);
                 var tokenstring = await GenerateJSONToken(user);
-                return Ok(new {token = tokenstring, id = user.Id});
+
+                var userRoleIds = await _userManager.GetRolesAsync(user);
+                List<IdentityUser> roles = new List<IdentityUser>();
+                List<string> roleNames = new List<string>();
+                foreach (string roleId in userRoleIds)
+                {
+                    var role = await _roleManager.FindByIdAsync(roleId);
+                    if (role != null)
+                    {
+                        var roleName = await _roleManager.GetRoleNameAsync(role);
+                        roleNames.Add(roleName);
+                    }
+                }
+                LoginReturnModel loginReturn = new LoginReturnModel()
+                {
+                    UserId = user.Id,
+                    Token = tokenstring,
+                    RoleNames = roleNames,
+                };
+                return Ok(loginReturn);
+                //return Ok(new {token = tokenstring, id = user.Id});
             }
             return Unauthorized(userDTO);
         }
