@@ -92,6 +92,7 @@ namespace LIMSWebPortalAPIApp
             services.AddSingleton<IDataAccess, SqlDb>();
             services.AddScoped<IAnalysisData, AnalysisData>();
             services.AddScoped<IProjectData, ProjectData>();
+            services.AddScoped<IUserData, UserData>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

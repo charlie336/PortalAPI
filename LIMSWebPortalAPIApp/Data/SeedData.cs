@@ -108,5 +108,7 @@ namespace LIMSWebPortalAPIApp.Data
                 var result = await userManager.AddToRoleAsync(user, "CUSTOMER_ADMIN");
             }
         }
+
+        
     }
 }

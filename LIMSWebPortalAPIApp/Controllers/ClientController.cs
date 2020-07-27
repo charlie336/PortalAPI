@@ -28,8 +28,7 @@ namespace LIMSWebPortalAPIApp.Controllers
             _logger = logger;
         }
 
-        [Authorize(Roles = "CUSTOMER_ADMIN")]
-        //[Authorize(Roles = "SUPER_ADMIN")]
+        [Authorize(Roles = "CUSTOMER_ADMIN, SUPER_ADMIN")]
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

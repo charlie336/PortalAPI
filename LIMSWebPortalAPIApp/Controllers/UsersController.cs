@@ -14,6 +14,7 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using LIMSWebPortalAPIApp.Contracts;
 using DataLibrary.DTOModels;
+using DataLibrary.Data;
 
 namespace LIMSWebPortalAPIApp.Controllers
 {
@@ -27,17 +28,20 @@ namespace LIMSWebPortalAPIApp.Controllers
         private RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _config;
         private readonly ILoggerService _logger;
+        private readonly IUserData _userData;
         public UsersController(SignInManager<IdentityUser> signInManager, 
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IConfiguration config,
-            ILoggerService logger)
+            ILoggerService logger,
+            IUserData userData)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _roleManager = roleManager;
             _config = config;
             _logger = logger;
+            _userData = userData;
         }
         [Route("Register")]
         [HttpPost]
@@ -79,25 +83,40 @@ namespace LIMSWebPortalAPIApp.Controllers
             if(result.Succeeded)
             {
                 var user = await _userManager.FindByNameAsync(email);
-                var tokenstring = await GenerateJSONToken(user);
+
+                //get client id
+                var customers = await _userData.GetCustomerbyUserId(user.Id);
+                int customerId = -1;
+                if (customers != null)
+                {
+                    if (customers.Count() > 0)
+                    {
+                        customerId = customers.First().Id;
+                    }
+                }
+
+                var tokenstring = await GenerateJSONToken(user,customerId);
 
                 var userRoleIds = await _userManager.GetRolesAsync(user);
                 List<IdentityUser> roles = new List<IdentityUser>();
                 List<string> roleNames = new List<string>();
                 foreach (string roleId in userRoleIds)
                 {
-                    var role = await _roleManager.FindByIdAsync(roleId);
-                    if (role != null)
-                    {
-                        var roleName = await _roleManager.GetRoleNameAsync(role);
-                        roleNames.Add(roleName);
-                    }
+                    roleNames.Add(roleId);
+                    //var role = await _roleManager.FindByNameAsync(roleId);
+                    //if (role != null)
+                    //{
+                    //    var roleName = await _roleManager.GetRoleNameAsync(role);
+                    //    roleNames.Add(roleName);
+                    //}
                 }
+
                 LoginReturnModel loginReturn = new LoginReturnModel()
                 {
                     UserId = user.Id,
                     Token = tokenstring,
                     RoleNames = roleNames,
+                    CustomerId = customerId,
                 };
                 return Ok(loginReturn);
                 //return Ok(new {token = tokenstring, id = user.Id});
@@ -126,7 +145,7 @@ namespace LIMSWebPortalAPIApp.Controllers
             return Ok(roleNames);
         }
 
-        private async Task<string> GenerateJSONToken(IdentityUser user)
+        private async Task<string> GenerateJSONToken(IdentityUser user, int customerId)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -135,6 +154,7 @@ namespace LIMSWebPortalAPIApp.Controllers
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim("CustomerId",customerId.ToString()),
             };
             var roles = await _userManager.GetRolesAsync(user);
             claims.AddRange(roles.Select(s => new Claim(ClaimsIdentity.DefaultNameClaimType, s)));
