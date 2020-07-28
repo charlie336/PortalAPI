@@ -22,6 +22,7 @@ using DataLibrary.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LIMSWebPortalAPIApp
 {
@@ -62,6 +63,14 @@ namespace LIMSWebPortalAPIApp
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
                     };
                 });
+
+            services.AddAuthorization(options =>
+            {
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+            });
+
             services.AddSwaggerGen(c=> {
                 c.SwaggerDoc(
                     "v1",
